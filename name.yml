@@ -1,0 +1,26 @@
+---
+ - hosts: all
+   become: yes
+   become_method: sudo
+   tasks:
+   - name: install apache
+     apt:
+       name: apache2
+       state: latest
+     when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' 
+   - name: install apache
+     yum:
+       name: httpd
+       state: latest
+     when: ansible_distribution == 'CentOS'
+   - name: start service
+     service:
+       name: apache2
+       state: restarted
+     when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+   - name: start service
+     service:
+       name: httpd
+       state: restarted
+     when: ansible_distribution == 'CentOS'
+   
