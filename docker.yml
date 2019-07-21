@@ -1,0 +1,16 @@
+---
+- hosts: master
+  become: yes
+  tasks: 
+  - name: install docker
+    yum: name={{ item }} state=latest
+    with_items:
+      - docker
+      - python-pip
+  - name: Install dependent python modules
+    pip: name=docker-py==1.10.6 state=latest
+  - name: start service
+    service: name=docker state=restarted
+  - name: pull images
+    docker_image:
+      name: centos
